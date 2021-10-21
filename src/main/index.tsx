@@ -32,11 +32,7 @@ const Main = () => {
 
   const onStartRace = useCallback(() => {
     setRaceStatus(RaceStatus.inProgress)
-  }, [ants, setRaceStatus]);
-
-  const renderItem: ListRenderItem<Ant> = useCallback(({ item }) => {
-    return <AntCard ant={item} updateChances={updateChances} raceStatus={raceStatus} />;
-  }, [raceStatus, ants]);
+  }, [setRaceStatus]);
 
   const updateChances = useCallback((ant: Ant, chances: number) => {
     let antToSet = ants.filter(a => ant.name === a.name)[0];
@@ -49,6 +45,10 @@ const Main = () => {
       setAnts(sortedAnts);
     }
   }, [ants, setAnts]);
+
+  const renderItem: ListRenderItem<Ant> = useCallback(({ item }) => {
+    return <AntCard ant={item} updateChances={updateChances} raceStatus={raceStatus} />;
+  }, [updateChances, raceStatus]);
 
   useEffect(() => {
     const isComplete = getCompleteStatus(ants);
@@ -66,7 +66,7 @@ const Main = () => {
     setTimeout(() => {
       setAnts(newAnts);
     }, 1);
-  }, [setRaceStatus, setShouldFetchAnts, setAnts, ants]);
+  }, [setRaceStatus, setAnts, ants]);
 
   return (
     <SafeAreaView style={styles.container}>

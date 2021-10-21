@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ant, RaceStatus } from '../models';
-import { generateAntWinLikelihoodCalculator } from '../utils';
+import { generateAntWinLikelihoodCalculator, promisifiedGenerateFunction } from '../utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,20 +40,18 @@ const AntCard = (props: Props) => {
   const { ant, updateChances, raceStatus } = props;
   const [likelihood, setLikelihood] = useState(0);
   const [chances, setChances] = useState('stretching...');
-  const generateLikelihood = generateAntWinLikelihoodCalculator();
 
   useEffect(() => {
     if (raceStatus === RaceStatus.inProgress) {
-      generateLikelihood(setLikelihood);
       setChances('running...');
+      const getLikelihood = async () => {
+        const chances = await promisifiedGenerateFunction();
+        setLikelihood(chances);
+        updateChances(ant, chances);
+      }
+      getLikelihood();
     }
-  }, [raceStatus]);
-
-  useEffect(() => {
-    if (likelihood > 0) {
-      updateChances(ant, likelihood);
-    }
-  }, [likelihood]);
+  }, [ant, raceStatus, updateChances]);
 
   return (
     <View style={styles.container}>
