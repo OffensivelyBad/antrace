@@ -16,3 +16,22 @@ export type Ant = {
 export type AntResponse = {
   ants: Ant[];
 }
+
+export const ExampleAnt: Ant = {
+  name: "testy",
+  length: 23,
+  color: "blue",
+  weight: 123,
+  complete: false
+};
+
+export const ExampleAntComplete: Ant = {
+  name: "testy",
+  length: 23,
+  color: "blue",
+  weight: 123,
+  likelihood: 1,
+  complete: true
+};
+
+export const ExampleAnts = [ExampleAnt, ExampleAntComplete];
